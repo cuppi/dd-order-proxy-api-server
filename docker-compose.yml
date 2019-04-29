@@ -1,0 +1,18 @@
+version: '3.2'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+  scrapyd:
+    build:
+      context: .
+      dockerfile: Dockerfile-Scrapyd
+    ports:
+      - "6800:6800"
+  splash:
+    image: "scrapinghub/splash"
+    ports:
+      - "8050:8050"
