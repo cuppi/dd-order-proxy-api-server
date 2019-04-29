@@ -4,9 +4,7 @@ WORKDIR /usr/src/app
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY ./web ./web
-COPY ./util ./util
-COPY ./app.py ./app.py
+COPY . .
 
 ENV PORT 8000
 EXPOSE 8000 5000
