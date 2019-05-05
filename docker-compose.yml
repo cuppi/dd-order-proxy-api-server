@@ -1,18 +1,25 @@
 version: '3.2'
 services:
   web:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: "dd-order-proxy-api-server"
     ports:
-      - "8000:8000"
+      - "6691:8000"
+    volumes:
+      - scrapyd_data:/usr/src/app/jobs
   scrapyd:
-    build:
-      context: .
-      dockerfile: Dockerfile-Scrapyd
+    image: "dd-order-proxy"
     ports:
       - "6800:6800"
+    volumes:
+      - ./scrapyd_jobs:/usr/src/app/jobs
+      - ./scrapyd_logs:/usr/src/app/logs
+      - scrapyd_data:/usr/src/app/jobs
+    environment:
+      SPLASH_URL: "http://splash:8050"
   splash:
     image: "scrapinghub/splash"
     ports:
       - "8050:8050"
+volumes:
+  scrapyd_data:
+
