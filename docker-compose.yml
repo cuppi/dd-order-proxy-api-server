@@ -13,6 +13,7 @@ services:
     volumes:
       - ./scrapyd_jobs:/usr/src/app/jobs
       - ./scrapyd_logs:/usr/src/app/logs
+      - ./scrapyd_tmp:/usr/src/app/tmp
     environment:
       SPLASH_URL: "http://splash:8050"
   splash:
