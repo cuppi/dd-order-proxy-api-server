@@ -19,5 +19,6 @@ services:
     image: "scrapinghub/splash"
     ports:
       - "8050:8050"
+    command: --disable-private-mode
 volumes:
   scrapyd_data:
