@@ -21,10 +21,10 @@ def hello_world():
 @app.route('/applyOrder', methods=['POST'])
 def apply_order():
     args = request.args
-    success, data = safe_get_keys(args, 'ticket', 'startAddress', 'endAddress')
+    success, data = safe_get_keys(args, 'ticket', 'startAddress', 'endAddress', 'city')
     if not success:
         return error(1001, '{} 参数不存在'.format(data))
-    return DDOrderController().apply_order(ticket=data[0], start=data[1], end=data[2])
+    return DDOrderController().apply_order(ticket=data[0], start=data[1], end=data[2], city=data[3])
 
 
 @app.route('/orderStatus', methods=['POST'])
