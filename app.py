@@ -13,6 +13,11 @@ def safe_get_keys(dict, *args):
     return True, values
 
 
+@app.errorhandler(Exception)
+def all_exception_handler(e):
+   return error(1000)
+
+
 @app.route('/')
 def hello_world():
     return 'Hello, World!'
@@ -31,29 +36,37 @@ def apply_order():
 @app.route('/applyOrderV2', methods=['POST'])
 def apply_order_v2():
     args = request.args
-    success, data = safe_get_keys(args,
-                                  'ticket',
-                                  'startName',
-                                  'startLat',
-                                  'startLng',
-                                  'endName',
-                                  'endLat',
-                                  'endLng',
-                                  'city')
+    success, data = safe_get_keys(
+        args,
+        'ticket',
+        'startName',
+        'startLocation',
+        'endName',
+        'endLocation',
+    )
+
     if not success:
         return error(1001, '{} 参数不存在'.format(data))
+    try:
+        start_lat, start_lng = [float(n) for n in data[2].split(',')]
+        end_lat, end_lng = [float(n) for n in data[4].split(',')]
+    except ValueError as e:
+        print(e)
+        return error(1001, '无效经纬度信息')
 
-    startAddr = args['startAddr'] if 'startAddr' in args else ''
-    endAddr = args['endAddr'] if 'endAddr' in args else ''
+    startAddr = args.get('startAddr', '')
+    endAddr = args.get('endAddr', '')
+    city_id = args.get('cityId', None)
+    city_name = args.get('cityName', None)
+
     return DDOrderController().apply_order_v2(
         ticket=data[0],
         start_name=data[1],
-        start_lat=data[2],
-        start_lng=data[3],
-        end_name=data[4],
-        end_lat=data[5],
-        end_lng=data[6],
-        city_id=data[7],
+        start_location=(start_lat, start_lng),
+        end_name=data[3],
+        end_location=(end_lat, end_lng),
+        city_id=city_id,
+        city_name=city_name,
         start_addr=startAddr,
         end_addr=endAddr
     )

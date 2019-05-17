@@ -42,16 +42,19 @@ class DDOrderController:
     def apply_order_v2(self, **kwargs):
         ticket = kwargs.get('', None)
         start_name = kwargs.get('start_name', None)
-        start_lat = kwargs.get('start_lat', None)
-        start_lng = kwargs.get('start_lng', None)
+        start_lat, start_lng = kwargs.get('start_location', None)
         end_name = kwargs.get('end_name', None)
-        end_lat = kwargs.get('end_lat', None)
-        end_lng = kwargs.get('end_lng', None)
+        end_lat, end_lng = kwargs.get('end_location', None)
         city_id = kwargs.get('city_id', None)
+        city_name = kwargs.get('city_name', None)
         start_addr = kwargs.get('start_addr', None)
         end_addr = kwargs.get('end_addr', None)
 
-        if city_id not in [c['id'] for c in city_lines]:
+        if city_id is None and city_name is None:
+            return error(1101, '城市参数为空')
+
+        if city_id and str(city_id) not in [c['id'] for c in city_lines] or \
+                city_name and city_name not in [c['name'] for c in city_lines]:
             return error(1101, '不存在的城市')
 
         crawl_url = self.combin_crawl_url(ticket)

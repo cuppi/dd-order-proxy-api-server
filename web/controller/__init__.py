@@ -22,5 +22,5 @@ def success(data):
     return create_network_result(data)
 
 
-def error(error_code, message=None):
+def error(error_code, message='系统繁忙'):
     return create_network_result(error_code=error_code, message=message)
