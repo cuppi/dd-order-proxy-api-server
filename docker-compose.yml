@@ -1,13 +1,13 @@
 version: '3.2'
 services:
   web:
-    image: "cuppi/dd-order-proxy-api-server"
+    image: "swr.cn-east-2.myhuaweicloud.com/jinbaozheng/dd-order-proxy-api-server"
     ports:
       - "6691:8000"
     volumes:
       - ./scrapyd_jobs:/usr/src/app/jobs
   scrapyd:
-    image: "cuppi/dd-order-proxy"
+    image: "swr.cn-east-2.myhuaweicloud.com/jinbaozheng/dd-order-proxy"
     ports:
       - "6800:6800"
     volumes:
