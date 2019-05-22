@@ -1,25 +1,8 @@
 version: '3.2'
 services:
   web:
-    image: "swr.cn-east-2.myhuaweicloud.com/jinbaozheng/dd-order-proxy-api-server"
+    image: "jinbaozheng/dd-order-proxy-api-server"
     ports:
       - "6691:8000"
-    volumes:
-      - ./scrapyd_jobs:/usr/src/app/jobs
-  scrapyd:
-    image: "swr.cn-east-2.myhuaweicloud.com/jinbaozheng/dd-order-proxy"
-    ports:
-      - "6800:6800"
-    volumes:
-      - ./scrapyd_jobs:/usr/src/app/jobs
-      - ./scrapyd_logs:/usr/src/app/logs
-      - ./scrapyd_tmp:/usr/src/app/tmp
-    environment:
-      SPLASH_URL: "http://splash:8050"
-  splash:
-    image: "scrapinghub/splash"
-    ports:
-      - "8050:8050"
-    command: --disable-private-mode
-volumes:
-  scrapyd_data:
+    env_file:
+      - ./opt/beta.env
