@@ -2,16 +2,10 @@ import requests
 from . import error, success
 from util.job_manager import JobManager
 from util.global_constant import city_lines
-from util.math_tool import MathTool
+from util.tool import MathTool, UrlTool
 
 
 class DDOrderController:
-
-    def combin_crawl_url(self, ticket):
-        base_url = 'https://open.es.xiaojukeji.com/webapp/entry'
-        client_id = '7f96250878304f8b6f554ec27dd1a82a_test'
-        crawl_url = '{}?client_id={}&ticket={}'.format(base_url, client_id, ticket)
-        return crawl_url
 
     def apply_order(self, ticket, start, end, city):
         if city not in [c['name'] for c in city_lines]:
@@ -19,7 +13,7 @@ class DDOrderController:
 
         project_name = 'default'
         spider_name = 'dd_order'
-        crawl_url = self.combin_crawl_url(ticket)
+        crawl_url = UrlTool.combin_crawl_url(ticket)
         params = {
             'project': project_name,
             'spider': spider_name,
@@ -60,7 +54,7 @@ class DDOrderController:
 
         if MathTool.distance_between_location((start_lat, start_lng), (end_lat, end_lng)) < 0.1:
             return error(1102, '起点与终点过近')
-        crawl_url = self.combin_crawl_url(ticket)
+        crawl_url = UrlTool.combin_crawl_url(ticket)
         project_name = 'default'
         spider_name = 'dd_order'
 
