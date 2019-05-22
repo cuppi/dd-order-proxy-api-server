@@ -6,8 +6,8 @@ services:
       - "6691:8000"
     volumes:
       - ./scrapyd_jobs:/usr/src/app/jobs
-    env_file:
-      - ./opt/beta.env
+    environment:
+      - BUILD_MODE=beta
   scrapyd:
     image: "jinbaozheng/dd-order-proxy"
     ports:

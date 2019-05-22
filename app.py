@@ -2,6 +2,7 @@ from flask import Flask, request
 from web.controller.dd_order_controller import DDOrderController
 from web.controller.dd_city_controller import DDCityController
 from web.controller import error
+from util.settings import BUILD_MODE
 
 app = Flask(__name__)
 
@@ -100,6 +101,12 @@ def city_list_from_local():
     args = request.args
     force_refresh = int(args.get('forceRefresh', 1))
     return DDCityController().city_list_from_local(force_refresh=force_refresh == 1)
+
+
+@app.route('/test', methods=['POST', 'GET'])
+def test():
+    return error(1006, 'mode is : {}'.format(BUILD_MODE))
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')

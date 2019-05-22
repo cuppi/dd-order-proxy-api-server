@@ -6,8 +6,8 @@ services:
       - "6691:8000"
     volumes:
       - ./scrapyd_jobs:/usr/src/app/jobs
-    env_file:
-      - ./opt/pro.env
+    environment:
+      - BUILD_MODE=pro
   scrapyd:
     image: "swr.cn-east-2.myhuaweicloud.com/jinbaozheng/dd-order-proxy"
     ports:
