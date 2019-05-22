@@ -2,6 +2,7 @@ from flask import Flask, request
 from web.controller.dd_order_controller import DDOrderController
 from web.controller.dd_city_controller import DDCityController
 from web.controller import error
+
 app = Flask(__name__)
 
 
@@ -73,7 +74,7 @@ def apply_order_v2():
 
 
 @app.route('/orderStatus', methods=['POST'])
-def orderStatus():
+def order_status():
     args = request.args
     success, data = safe_get_keys(args, 'jobId')
     if not success:
@@ -82,11 +83,23 @@ def orderStatus():
 
 
 @app.route('/cityList', methods=['POST'])
-def cityList():
+def city_list():
+    args = request.args
+    success, data = safe_get_keys(
+        args,
+        'ticket',
+    )
+
+    if not success:
+        return error(1001, '{} 参数不存在'.format(data))
+    return DDCityController().city_list(data[0])
+
+
+@app.route('/cityListFromLocal', methods=['POST'])
+def city_list_from_local():
     args = request.args
     force_refresh = int(args.get('forceRefresh', 1))
-    return DDCityController().city_list(force_refresh=force_refresh == 1)
-
+    return DDCityController().city_list_from_local(force_refresh=force_refresh == 1)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
