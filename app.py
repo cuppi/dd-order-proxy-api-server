@@ -4,6 +4,7 @@ from web.controller.dd_city_controller import DDCityController
 from web.controller import error
 from util.settings import BUILD_MODE
 from logging.config import dictConfig
+from datetime import datetime
 
 dictConfig({
     'version': 1,
@@ -17,7 +18,8 @@ dictConfig({
         'formatter': 'default',
     }, 'file': {
         'class': 'logging.FileHandler',
-        'filename': './logs/test.log'
+        'filename': './logs/{}.log'.format(datetime.now().strftime('%Y-%m-%d_%H_%M_%S')),
+        'formatter': 'default',
     }},
     'root': {
         'level': 'WARN',
