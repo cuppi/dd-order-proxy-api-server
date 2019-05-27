@@ -6,6 +6,8 @@ services:
       - "6691:8000"
     volumes:
       - ./scrapyd_jobs:/usr/src/app/jobs
+      - ./web_logs:/usr/src/app/logs
+      - ./task_records:/usr/src/app/task_records
     environment:
       - BUILD_MODE=pro
   scrapyd:
@@ -16,6 +18,7 @@ services:
       - ./scrapyd_jobs:/usr/src/app/jobs
       - ./scrapyd_logs:/usr/src/app/logs
       - ./scrapyd_tmp:/usr/src/app/tmp
+      - ./task_records:/usr/src/app/task_records
     environment:
       SPLASH_URL: "http://splash:8050"
   splash:
