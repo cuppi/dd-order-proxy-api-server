@@ -108,3 +108,4 @@ venv.bak/
 /scrapyd_jobs/
 /scrapyd_logs/
 /scrapyd_tmp/
+/logs/

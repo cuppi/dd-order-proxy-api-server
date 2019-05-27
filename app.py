@@ -3,6 +3,27 @@ from web.controller.dd_order_controller import DDOrderController
 from web.controller.dd_city_controller import DDCityController
 from web.controller import error
 from util.settings import BUILD_MODE
+from logging.config import dictConfig
+
+dictConfig({
+    'version': 1,
+    'formatters': {'default': {
+        'format': '[%(asctime)s-%(levelname)s]: %(message)s',
+        'datefmt': '%Y-%m-%d %H:%M:%S %p',
+    }},
+    'handlers': {'wsgi': {
+        'class': 'logging.StreamHandler',
+        'stream': 'ext://flask.logging.wsgi_errors_stream',
+        'formatter': 'default',
+    }, 'file': {
+        'class': 'logging.FileHandler',
+        'filename': './logs/test.log'
+    }},
+    'root': {
+        'level': 'WARN',
+        'handlers': ['wsgi', 'file'],
+    }
+})
 
 app = Flask(__name__)
 
@@ -16,9 +37,9 @@ def safe_get_keys(dict, *args):
     return True, values
 
 
-@app.errorhandler(Exception)
-def all_exception_handler(e):
-   return error(1000)
+# @app.errorhandler(Exception)
+# def all_exception_handler(e):
+#    return error(1000)
 
 
 @app.route('/')
@@ -105,6 +126,8 @@ def city_list_from_local():
 
 @app.route('/test', methods=['POST', 'GET'])
 def test():
+    # a = app.logger
+    app.logger.warn('just a test log')
     return error(1006, 'mode is : {}'.format(BUILD_MODE))
 
 

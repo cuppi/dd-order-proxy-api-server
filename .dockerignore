@@ -1,0 +1,4 @@
+/logs/*
+/scrapyd_jobs/
+/venv/
+/scripts/
