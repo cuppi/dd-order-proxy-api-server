@@ -14,16 +14,20 @@ class JobManager:
 
     @staticmethod
     def get_job(job_id):
-        file_path = Path(os.path.join(os.path.dirname(__file__), '..', 'task_records', '{}.tmp'.format(job_id)))
-        if not file_path.exists():
-            return {
-                'data': None,
-                'errorCode': 1001,
-                'message': '非法jobId',
-            }
         file_path = Path(os.path.join(os.path.dirname(__file__), '..', 'jobs', '{}.json'.format(job_id)))
         if not file_path.exists():
-            return None
+            if not Path(os.path.join(os.path.dirname(__file__),
+                                     '..',
+                                     'task_records',
+                                     '{}.tmp'.format(job_id)
+                                     )).exists():
+                return {
+                    'data': None,
+                    'errorCode': 1001,
+                    'message': '非法jobId',
+                }
+            else:
+                return None
         with open(file_path, 'r') as f:
             try:
                 data = json.load(f)
