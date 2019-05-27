@@ -83,6 +83,7 @@ def apply_order_v2():
     endAddr = args.get('endAddr', '')
     city_id = args.get('cityId', None)
     city_name = args.get('cityName', None)
+    get_estimate_fee = args.get('get_estimate_fee', None)
 
     return DDOrderController().apply_order_v2(
         ticket=data[0],
@@ -93,7 +94,8 @@ def apply_order_v2():
         city_id=city_id,
         city_name=city_name,
         start_addr=startAddr,
-        end_addr=endAddr
+        end_addr=endAddr,
+        get_estimate_fee=get_estimate_fee
     )
 
 
@@ -128,10 +130,7 @@ def city_list_from_local():
 
 @app.route('/test', methods=['POST', 'GET'])
 def test():
-    # a = app.logger
-    app.logger.warn('just a test log')
     return error(1006, 'mode is : {}'.format(BUILD_MODE))
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
