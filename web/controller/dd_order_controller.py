@@ -44,6 +44,7 @@ class DDOrderController:
         end_lat, end_lng = kwargs.get('end_location', None)
         city_id = kwargs.get('city_id', None)
         city_name = kwargs.get('city_name', None)
+        get_estimate_fee = kwargs.get('get_estimate_fee', None)
 
         if city_id is None and city_name is None:
             return error(1101, '城市参数为空')
@@ -70,6 +71,7 @@ class DDOrderController:
             'endAddr': end_addr,
             'endName': end_name,
             'end_location': '{}, {}'.format(end_lat, end_lng),
+            'get_estimate_fee': '' if get_estimate_fee is None else get_estimate_fee
         }
         res = requests.post('http://scrapyd:6800/schedule.json', params)
         data = res.json()
