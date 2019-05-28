@@ -39,6 +39,43 @@ def safe_get_keys(dict, *args):
     return True, values
 
 
+def do_main_process(is_get_estimate_fee):
+    args = request.args
+    success, data = safe_get_keys(
+        args,
+        'ticket',
+        'startName',
+        'startLocation',
+        'endName',
+        'endLocation',
+    )
+    if not success:
+        return error(1001, '{} 参数不存在'.format(data))
+    try:
+        start_lat, start_lng = [float(n) for n in data[2].split(',')]
+        end_lat, end_lng = [float(n) for n in data[4].split(',')]
+    except ValueError as e:
+        print(e)
+        return error(1001, '无效经纬度信息')
+    start_addr = args.get('startAddr', '')
+    end_addr = args.get('endAddr', '')
+    city_id = args.get('cityId', None)
+    city_name = args.get('cityName', None)
+    get_estimate_fee = 'yes' if is_get_estimate_fee else args.get('get_estimate_fee', None)
+
+    return DDOrderController().apply_order_v2(
+        ticket=data[0],
+        start_name=data[1],
+        start_location=(start_lat, start_lng),
+        end_name=data[3],
+        end_location=(end_lat, end_lng),
+        city_id=city_id,
+        city_name=city_name,
+        start_addr=start_addr,
+        end_addr=end_addr,
+        get_estimate_fee=get_estimate_fee
+    )
+
 # @app.errorhandler(Exception)
 # def all_exception_handler(e):
 #    return error(1000)
@@ -60,43 +97,13 @@ def apply_order():
 
 @app.route('/applyOrderV2', methods=['POST'])
 def apply_order_v2():
-    args = request.args
-    success, data = safe_get_keys(
-        args,
-        'ticket',
-        'startName',
-        'startLocation',
-        'endName',
-        'endLocation',
-    )
+    do_main_process(False)
 
-    if not success:
-        return error(1001, '{} 参数不存在'.format(data))
-    try:
-        start_lat, start_lng = [float(n) for n in data[2].split(',')]
-        end_lat, end_lng = [float(n) for n in data[4].split(',')]
-    except ValueError as e:
-        print(e)
-        return error(1001, '无效经纬度信息')
 
-    startAddr = args.get('startAddr', '')
-    endAddr = args.get('endAddr', '')
-    city_id = args.get('cityId', None)
-    city_name = args.get('cityName', None)
-    get_estimate_fee = args.get('get_estimate_fee', None)
+@app.route('/getEstimateFee', methods=['POST'])
+def get_order_estimate_fee():
+    do_main_process(True)
 
-    return DDOrderController().apply_order_v2(
-        ticket=data[0],
-        start_name=data[1],
-        start_location=(start_lat, start_lng),
-        end_name=data[3],
-        end_location=(end_lat, end_lng),
-        city_id=city_id,
-        city_name=city_name,
-        start_addr=startAddr,
-        end_addr=endAddr,
-        get_estimate_fee=get_estimate_fee
-    )
 
 
 @app.route('/orderStatus', methods=['POST'])
